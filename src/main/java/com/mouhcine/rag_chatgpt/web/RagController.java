@@ -1,5 +1,6 @@
 package com.mouhcine.rag_chatgpt.web;
 
+import com.mouhcine.rag_chatgpt.service.ChatAiService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,15 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/chat")
 public class RagController {
-    private ChatClient _chatClient;
+    private ChatAiService chatAiService;
 
-    public RagController(ChatClient.Builder builder) {
-        this._chatClient = builder.build();
+    public RagController(ChatAiService builder) {
+        this.chatAiService = builder;
     }
 
     @GetMapping(value = "/ask",produces = MediaType.TEXT_PLAIN_VALUE)
     public String chat(String question){
-        return  _chatClient.prompt().user(question)
-                .call().content();
+        return  chatAiService.ask(question);
     }
 }
